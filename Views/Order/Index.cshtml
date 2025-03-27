@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "HistoryPurchase";
+
+}
+
+<div style="height:50px"></div>
+<div class="card card-custom gutter-b mt-1 ">
+    <div class="card-body">
+        
+        <div class="row mt-2 pe-0 me-0">
+            <div class="col-12 mb-2 row pe-0 m-0">
+                <div class="pagetitle col-sm-8 col-12 m-0">
+                    <h1 class="fs-2">Lịch sử mua hàng</h1>
+                </div>
+            </div>
+
+            <div class="col-12 mb-1 row pe-0 m-0">
+                <div class="col-md-4 col-12 p-1">
+                    <div>
+                        <label for="formDateStart" class="form-label form-label-sm mb-0">Từ ngày</label>
+                        <input type="date" class="form-control form-control-sm" id="date_start" value="@ViewBag.FirstDay.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 p-1">
+                    <div>
+                        <label for="formDateStart" class="form-label form-label-sm mb-0">Đến ngày</label>
+                        <input type="date" class="form-control form-control-sm" id="date_end" value="@ViewBag.LastDay.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-1 p-1">
+                    <label for="formDateStart" class="form-label form-label-sm mb-0">Từ khóa</label>
+                    <div class="input-group mb-1 me-1">
+                        <input id="request" type="text" class="form-control form-control-sm" placeholder="Tìm kiếm">
+                        <button class="btn btn-primary btn-sm" type="button" id="btn_search" onclick="GetAll()"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="content" class="mt-3 mb-5">
+            
+        </div>
+
+        @* <table class="table align-middle mb-0 bg-white table-bordered">
+               <thead class="bg-light">
+                   <tr>
+                       <th class="text-center">Mã hóa đơn</th>
+                       <th class="text-center">Ngày tạo đơn</th>
+                       <th class="text-center">Trạng thái</th>
+                       <th class="text-center">Tổng</th>
+                       <th class="text-center">Tên</th>
+                       <th class="text-center">Điện thoại</th>
+                       <th class="text-center">Địa chỉ</th>
+                       <th class="text-center"></th>
+                   </tr>
+               </thead>
+               <tbody id="tbody">
+               </tbody>
+           </table> *@
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal_reason_cancel" tabindex="-1" aria-labelledby="modal_reason_cancel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lý do hủy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" style="min-height: 150px" id="reason_cancel_order">
+
+                </textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="height:50px"></div>
+<script src="~/js/client/historypurchase.js"></script>

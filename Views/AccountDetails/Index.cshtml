@@ -1,0 +1,153 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="container mt-5">
+    <div class="row gutters">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 gy-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <div class="user-avatar mb-3 w-100">
+                                <img class="w-100" src="@ViewBag.Account.AvatarUrl" alt="@ViewBag.Account.FullName" id="main-user-image">
+                                <input type="file" class="w-100 btn btn-sm" name="AttachFiles" accept=".jpg,.jpeg,.png,.gif" value="" onchange="onSelectedFile(event);" />
+
+                            </div>
+
+                            <h5 class="user-name m-2" id="main-user-name">@ViewBag.Account.FullName</h5>
+                            <h6 class="user-email m-2" id="main-user-email">@ViewBag.Account.Email</h6>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about-tab-data" type="button" role="tab" aria-controls="about-tab-data" aria-selected="true">Thông tin cá nhân</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password-tab-data" type="button" role="tab" aria-controls="password-tab-data" aria-selected="false">Mật khẩu</button>
+                </li>
+
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="about-tab-data" role="tabpanel" aria-labelledby="about-tab">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <form action="javascript:UpdateLoadData();" method="get">
+                                <div class="row gutters gy-3">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Họ và tên</label>
+                                            <input type="text" class="form-control" id="Account_FullName" value="@ViewBag.Account.FullName" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="eMail">Email</label>
+                                            <input type="email" class="form-control" id="Account_Email" readonly disabled value="@ViewBag.Account.Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="phone">Số điện thoại</label>
+                                            <input type="text" class="form-control" id="Account_PhoneNumber" value="@ViewBag.Account.PhoneNumber" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="phone">Giới tính</label>
+                                            <select class="form-control" id="Account_Gender">
+                                                <option value="0">Nam</option>
+                                                <option value="1">Nữ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="phone">Địa chỉ</label>
+                                            <textarea class="form-control" id="Account_Address" style="min-height: 150px">@ViewBag.Account.Address</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="text-center">
+                                            <button type="submit" id="btn-save-infor" name="submit" class="btn btn-success">Cập nhật</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="tab-pane fade" id="password-tab-data" role="tabpanel" aria-labelledby="password-tab">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <form action="javascript: ChangePassword();" method="get">
+                                <div class="row gutters gy-3">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Mật khẩu cũ</label>
+                                            <input type="password" class="form-control" id="Account_Old_Password" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="eMail">Mật khẩu mới</label>
+                                            <input type="password" class="form-control" id="Account_New_Password" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="phone">Xác thực mật khẩu</label>
+                                            <input type="password" class="form-control" id="Account_Confirm_Password" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="text-center">
+                                            <button type="submit" id="btn-save-password" name="submit" class="btn btn-success">Cập nhật</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<input class="form-control d-none" type="number" id="Account_ID" value="@ViewBag.Account.Id" hidden readonly disabled />
+<input class="form-control d-none" type="number" id="Account_Gender_Data" value="@ViewBag.Account.Gender" hidden readonly disabled />
+ 
+
+<script src="~/js/client/accountdetails.js"></script>

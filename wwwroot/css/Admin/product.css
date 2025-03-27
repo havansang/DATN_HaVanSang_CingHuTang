@@ -1,0 +1,14 @@
+﻿
+.a-product-details{
+    position: relative;
+}
+.image-product-details
+{
+    width: 15% !important;
+}
+
+.icon-x-span {
+    position: absolute;
+    font-size: 24px;
+    right: 10px;
+}
