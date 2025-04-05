@@ -12,6 +12,16 @@ function ChangeSize(event) {
     $("#Price").html(`${price} VNĐ`)
 }
 
+function showToast(msg, success = true) {
+    $('#toast-message')
+        .css('background', success ? '#28a745' : '#dc3545')
+        .text(msg)
+        .fadeIn(200)
+        .delay(1500)
+        .fadeOut(400);
+}
+
+
 function AddCart(event) {
     let accountId = $("#account_id").val();
     if (accountId <= 0) {
@@ -47,9 +57,9 @@ function AddCart(event) {
         data: JSON.stringify(object),
         success: function (result) {
             if (parseInt(result.status) == 1) {
-                alert(result.message);
+                showToast(result.message, parseInt(result.status) == 1);
             } else {
-                alert(result.message);
+                alert("Lỗi hệ thống!");
             }
         },
         error: function (err) {

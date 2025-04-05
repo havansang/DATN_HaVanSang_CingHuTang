@@ -1,4 +1,4 @@
-html {
+﻿html {
     font-size: 14px;
 }
 
@@ -19,4 +19,39 @@ html {
 
 body {
     margin-bottom: 60px;
+}
+
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar {
+    background-color: white !important;
+}
+
+
+body {
+    padding-top: 70px; 
+}
+
+
+header.scrolled {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+
+@media (max-width: 992px) {
+    header {
+        position: relative;
+    }
+
+    body {
+        padding-top: 0;
+    }
 }

@@ -1,0 +1,209 @@
+﻿@{
+    ViewData["Title"] = "GoodsReceipt";
+}
+
+
+
+<div class="card card-custom gutter-b mt-1 ">
+    <div class="card-body">
+
+        <div class="row mt-2 pe-0 me-0">
+            <div class="col-12 mb-2 row pe-0 m-0">
+                <div class="pagetitle col-sm-8 col-12 m-0">
+                    <h1 class="fs-2">Phiếu nhập</h1>
+                </div>
+                <div class="col-sm-4 col-12 d-flex justify-content-end pe-0">
+                    <button onclick="DowLoadExcel()" class="btn btn-sm btn-success mb-1" id="ExportExcel"><i class="bi bi-arrow-up-right-square"></i> Export</button>
+                </div>
+            </div>
+
+            <div class="col-12 mb-1 row pe-0 m-0">
+                <div class="col-md-2 col-12">
+                    <div class="mb-1">
+                        <label for="dateStart" class="form-label form-control-sm p-0 m-0">Từ ngày</label>
+                        <input id="dateStart" type="date" class="form-control form-control-sm" value="@ViewBag.DateStart">
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-12">
+                    <div class="mb-1">
+                        <label for="dateEnd" class="form-label form-control-sm p-0 m-0">Đến ngày</label>
+                        <input id="dateEnd" type="date" class="form-control form-control-sm" value="@ViewBag.DateEnd">
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12">
+                    <div class="mb-1">
+                        <label for="accountID" class="form-label form-control-sm p-0 m-0">Nhân viên</label>
+                        <select class="form-control form-control-sm select2" id="accountID" asp-items="@ViewBag.LstAccount">
+                            <option value="0" selected>-- Tất cả --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12 mb-1 p-0">
+                    <label for="request" class="form-label form-control-sm p-0 m-0">Từ khóa</label>
+                    <div class="input-group mb-1 me-1">
+                        <input id="request" type="text" class="form-control form-control-sm" placeholder="Tìm kiếm">
+                        <button class="btn btn-primary btn-sm" type="button" id="btn_search"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <table class="table table-bordered border-primary font-custom">
+            <thead>
+                <tr class="text-center align-middle">
+                    <th class="table-color" scope="col" style="width: 7%;"><button id="add_new" class="btn btn-success" title="Tạo mới"><i class="bi bi-plus-lg"></i></button></th>
+                    <th class="table-color" scope="col">Mã phiếu nhập</th>
+                    <th class="table-color" scope="col">Người nhập</th>
+                    <th class="table-color" scope="col">Ngày nhập</th>
+                    <th class="table-color" scope="col">Tổng tiền</th>
+                    <th class="table-color" scope="col">Ghi chú</th>
+                    <th class="table-color" scope="col">Người tạo</th>
+                    <th class="table-color" scope="col">Ngày tạo</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+
+        @* Phan trang *@
+        <div class="row d-flex justify-content-between">
+            <div class="col-xl-2 col-sm-12 ">
+                <p id="page_details"></p>
+            </div>
+            <div class="col-xl-4 col-sm-12 d-flex justify-content-end me-2">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination" id="pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+@* modal *@
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header modal-color pt-2 pb-2">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="CloseModal()"></button>
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100 active" id="btninformation" data-bs-toggle="tab" data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="btninformation" aria-selected="true">Thông tin</button>
+                    </li>
+
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button class="nav-link w-100" id="btnsteps" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="btnsteps" aria-selected="false">Chi tiết</button>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+                    <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="btninformation">
+                        <form class="row g-3 mt-1" id="form">
+                            <div class="col-sm-6 col-12 row m-0 p-1">
+
+                                <div class="col-12">
+                                    <div>
+                                        <label for="formCode" class="form-label">Mã phiếu nhập<span style="color: red">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" id="formCode" disabled readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-12">
+                                    <div>
+                                        <label for="formFullName" class="form-label">Người nhập<span style="color: red">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" id="formFullName" value="@ViewBag.Account.FullName" disabled readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-12">
+                                    <div>
+                                        <label for="formReceiptedDate" class="form-label form-control-sm p-0 m-0">Ngày nhập kho</label>
+                                        <input id="formReceiptedDate" type="date" class="form-control form-control-sm" value="@ViewBag.CurrentDate">
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div>
+                                        <label for="formSupplier" class="form-label">Nhà cung cấp</label>
+                                        <select class="form-control form-control-sm select2" id="formSupplier" asp-items="@ViewBag.ListSupplier">
+                                            <option value="0" selected>--Chọn nhà cung cấp--</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6 col-12 row m-0 p-1">
+                                <div class="col-12">
+                                    <label for="formDecription" class="form-label">Ghi chú</label>
+                                    <textarea class="form-control form-control-sm" style="height: 84% !important" id="formDecription" ></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-12 m-0 p-3">
+                                <input type="file" class="w-100" name="AttachFiles" value="" multiple onchange="onSelectedFile(event);" />
+                                <div id="AttachFiles" class="rounded border bg-whitesmoke">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+
+                    @* Modal thêm chi tiết phiếu nhập*@
+                    <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" aria-labelledby="btnsteps" style="max-height: 45vh; overflow-y: scroll;">
+                        <table class="table table-bordered border-primary">
+                            <thead>
+                                <tr class="text-center align-middle">
+                                    <th class="table-color" style="width: 30%;">Nguyên vật liệu<span style="color: red;">*</span></th>
+                                    <th class="table-color" style="width: 20%;">Đơn giá<span style="color: red;">*</span></th>
+                                    <th class="table-color" style="width: 15%;">Số lượng<span style="color: red;">*</span></th>
+                                    <th class="table-color" style="width: 5%;">Đơn vị</th>
+                                    <th class="table-color" style="width: 25%;">Tổng tiền</th>
+                                    <th class="table-color" style="width: 5%;"><button onclick="addRow()" class="btn btn-primary">+</button></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodySteps">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer pt-1 pb-1">
+
+                <div class="row p-0 w-100">
+                    <div class="col-xl-6 col-sm-12 mt-1 p-0">
+                        <button type="button" title="Delete" id="btn_deleteModal" class="btn btn-danger"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+
+                    <div class="col-xl-6 col-sm-12 mt-1 d-flex justify-content-end p-0">
+                        <button type="button" class="btn btn-primary" onclick="CreateOrUpdate()"><i class="bi bi-clipboard-check"></i> Lưu</button>
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal" onclick="CloseModal()">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/js/admin/goods_receipt.js"></script>

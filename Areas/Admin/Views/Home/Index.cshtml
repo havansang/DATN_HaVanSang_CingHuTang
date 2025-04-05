@@ -1,0 +1,303 @@
+﻿@{
+    ViewData["Title"] = "HomePage";
+}
+
+<style>
+    .card-title {
+    }
+</style>
+
+<div class="card" id="card_container">
+    <div class="card-header p-0">
+        <div class="row">
+            <div class=" col-4"></div>
+            <h2 class="text-dark fw-bolder text-center mt-1 col-4 mb-0" style="color:#001eaa !important">THỐNG KÊ</h2>
+        </div>
+    </div>
+
+
+    <div class="col-12 p-2">
+        <div class="row">
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+                <div class="card info-card sales-card">
+
+                    <div class="card-body">
+                        <h5 class="card-title" style="padding: 20px 0 15px 0; font-size: 18px; font-weight: 500; color: #012970;">Lượt bán <span>| Tuần</span></h5>
+
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="font-size: 32px; line-height: 0; width: 64px; height: 64px; flex-shrink: 0; flex-grow: 0; color: #4154f1; background: #f6f6fe;">
+                                <i class="bi bi-cart"></i>
+                            </div>
+                            <div class="ps-3" id="total_sales">
+                                <h6>145</h6>
+                                <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div><!-- End Sales Card -->
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+                <div class="card info-card revenue-card">
+
+                    <div class="card-body">
+                        <h5 class="card-title" style="padding: 20px 0 15px 0; font-size: 18px; font-weight: 500; color: #012970;">Doanh thu <span>| Tuần</span></h5>
+
+                        <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="font-size: 32px; line-height: 0; width: 64px; height: 64px; flex-shrink: 0; flex-grow: 0; color: #2eca6a; background: #e0f8e9;">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <div class="ps-3" id="total_revenue">
+                                <h6>$3,264</h6>
+                                <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div><!-- End Order Unprocess Card -->
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-12">
+
+                <div class="card info-card customers-card">
+                    <div class="card-body">
+                        <a asp-controller="Order" asp-action="Index">
+                            <h5 class="card-title" style="padding: 20px 0 15px 0; font-size: 18px; font-weight: 500; color: #012970;">Đơn hàng mới</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="font-size: 32px; line-height: 0; width: 64px; height: 64px; flex-shrink: 0; flex-grow: 0; color: #ff771d; background: #ffecdf;">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="total_order_unprocess">1244</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </div><!-- End Customers Card -->
+        </div>
+    </div>
+
+    <!-- Top Selling -->
+    <div class="col-12 row">
+        <div class="col-lg-4 col-12">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-11">
+                            <h6 class="p-0 mb-0 w-100 text-center fw-bold mt-1" id="title_topping_best_sale">TOP 5 topping bán chạy trong Tuần</h6>
+                        </div>
+                        <div class="col-1">
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow px-2">
+                                    <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeTopping(1)"> Tuần</span></li>
+                                    <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeTopping(2)"> Tháng</span></li>
+                                    <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeTopping(3)"> Năm</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="chart_topping_best_sale" class="h-100"></div>
+                </div>
+            </div>
+
+
+            <div class="card mb-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-11">
+                            <h6 class="p-0 mb-0 w-100 text-center fw-bold mt-1" id="title_percent_order_success">Tỉ lệ đơn hàng thành công theo Tuần</h6>
+                        </div>
+                        <div class="col-1">
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow px-2">
+                                    <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeTable(1)"> Tuần</span></li>
+                                    <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeTable(2)"> Tháng</span></li>
+                                    <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeTable(3)"> Năm</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="chart_percent_order_success"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-8 col-12">
+            <div class="card top-selling overflow-auto">
+                <div class="card-body pb-0">
+                    <h5 class="card-title" style="padding: 20px 0 15px 0; font-size: 18px; font-weight: 500; color: #012970;">Top Selling <span>| Tuần</span></h5>
+
+                    <table class="table table-border table-responsive">
+                        <thead>
+                            <tr class="align-middle text-center">
+                                <th scope="col" style="width: 10%">Hình ảnh</th>
+                                <th scope="col">Sản phẩm</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Lượt bán</th>
+                                <th scope="col">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product_bestsale_week">
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div><!-- End Top Selling -->
+    @if (ViewBag.Account.Role != 3)
+    {
+        <div class="card-body pb-0">
+            <div class="row gy-3 mt-1">
+
+                <div class="col-lg-4 col-12 mb-1 pe-0">
+                    <div class="card m-0 p-1" id="card_okng">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card info-card revenue-card">
+                                    <div class="card-body pb-1">
+                                        <div class="row ">
+                                            <div class="col-11">
+                                                <h5 class="card-title m-0 p-0" style="font-size: 18px; font-weight: 500; color: #012970;">Doanh thu <span id="title_chart_total_revenuee"></span></h5>
+                                            </div>
+                                            <div class="col-1">
+                                                <div class="filter">
+                                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                                    <div class="row dropdown-menu dropdown-menu-end dropdown-menu-arrow px-2">
+                                                        <div class="col-12">
+                                                            <label class="form-label" for="dateStart_top_sale">Từ ngày</label>
+                                                            <input type="date" name="name" value="@ViewBag.DateStart" class="form-control form-control-sm mb-1" id="dateStart_total_revenuee" />
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <label class="form-label" for="dateEnd_hardest_to_sell">Đến ngày</label>
+                                                            <input type="date" name="name" value="@ViewBag.DateEnd" class="form-control form-control-sm mb-1" id="dateEnd_total_revenue" />
+                                                        </div>
+                                                        <div class="col-12 text-center">
+
+                                                            <button class="btn btn-sm btn-primary" onclick="ChartTotalRevanue()">Lọc dữ liệu</button>
+                                                        </div>
+                                                    </div>
+                                                    @*  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow px-2">
+                                                <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeFilter(1)"> Tuần</span></li>
+                                                <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeFilter(2)"> Tháng</span></li>
+                                                <li class="p-1"><span class="btn btn-sm btn-primary w-100" onclick="SetTypeFilter(3)"> Năm</span></li>
+                                                </ul> *@
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="font-size: 32px; line-height: 0; width: 64px; height: 64px; flex-shrink: 0; flex-grow: 0; color: #2eca6a; background: #e0f8e9;">
+                                                <i class="bi bi-currency-dollar"></i>
+                                            </div>
+                                            <div class="ps-3 align-middle" id="chart_total_revenue_html">
+                                                <h6>$3,264</h6>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart_total_revenue" style="height:20vh"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-8 col-12 mb-1 pe-0">
+                    <div class="card m-0 p-1 h-100" id="card_okng">
+                        <div class="row">
+                            <div class="col-4">
+                                <input class="form-control form-control-sm" type="month" value="@ViewBag.Month" onchange="reloadChartPuchase()" id="inputMonth" />
+                            </div>
+                            <div class="col-4">
+                                <h6 class="p-0 mb-0 w-100 text-center fw-bold mt-1" id="title_puchase">Doanh thu tháng @ViewBag.Month1.ToString()-@ViewBag.Year.ToString()</h6>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart_puchase"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 row gy-2">
+                    <div class="col-lg-6 col-12 mb-1 pe-0">
+                        <div class="card m-0 p-1" id="card_okng">
+                            <div class="row">
+
+                                <div class="col-sm-3 col-6">
+                                    <label class="form-label" for="dateStart_top_sale">Từ ngày</label>
+                                    <input type="date" name="name" value="@ViewBag.DateStart" class="form-control form-control-sm mb-1" id="dateStart_top_sale" />
+                                </div>
+                                <div class="col-sm-3 col-6">
+                                    <label class="form-label" for="dateStart_top_sale">Đến ngày</label>
+                                    <input type="date" name="name" value="@ViewBag.DateEnd" class="form-control form-control-sm mb-1" id="dateEnd_top_sale" />
+                                </div>
+
+                                <div class="col-sm-6 col-12">
+                                    <label class="form-label" for="selected_top_sale">Số lượng sản phẩm</label>
+                                    <select class="form-control form-control-sm mb-1" id="selected_top_sale" onchange="onchangeSelectTop('#selected_top_sale', '#title_top_sale')">
+                                        <option value="5">Top 5</option>
+                                        <option value="10">Top 10</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="p-0 mb-0 w-100 text-center fw-bold mt-1" id="title_top_sale">TOP 5 sản phẩm bán chạy</h6>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart_top_sale" style="height:20vh"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-12 mb-1 pe-0">
+                        <div class="card m-0 p-1" id="card_okng">
+                            <div class="row">
+                                <div class="col-sm-3 col-6">
+                                    <label class="form-label" for="dateStart_hardest_to_sell">Từ ngày</label>
+                                    <input type="date" name="name" value="@ViewBag.DateStart" class="form-control form-control-sm mb-1" id="dateStart_hardest_to_sell" />
+                                </div>
+                                <div class="col-sm-3 col-6">
+                                    <label class="form-label" for="dateEnd_hardest_to_sell">Đến ngày</label>
+                                    <input type="date" name="name" value="@ViewBag.DateEnd" class="form-control form-control-sm mb-1" id="dateEnd_hardest_to_sell" />
+                                </div>
+
+                                <div class="col-sm-6 col-12">
+                                    <label class="form-label" for="selected_top_sale">Số lượng sản phẩm</label>
+                                    <select class="form-control form-control-sm mb-1" id="selected_hardest_to_sell" onchange="onchangeSelectTop('#selected_hardest_to_sell', '#title_hardest_to_sell')">
+                                        <option value="5">Top 5</option>
+                                        <option value="10">Top 10</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="p-0 mb-0 w-100 text-center fw-bold mt-1" id="title_hardest_to_sell">TOP 5 sản phẩm bán ít nhất</h6>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart_hardest_to_sell" style="height:20vh"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+<div style="height: 100px"></div>
+<script src="~/js/admin/home.js"></script>
+

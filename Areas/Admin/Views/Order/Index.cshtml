@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "Order";
+}
+
+<div class="card card-custom gutter-b mt-1 ">
+    <div class="card-body">
+
+        <div class="row mt-2 pe-0 me-0">
+            <div class="col-12 mb-2 row pe-0 m-0">
+                <div class="pagetitle col-sm-8 col-12 m-0">
+                    <h1 class="fs-2">Đơn đặt hàng</h1>
+                </div>
+                <div class="col-sm-4 col-12 d-flex justify-content-end pe-0">
+                    <button onclick="DowLoadExcel()" class="btn btn-sm btn-success mb-1" id="ExportExcel"><i class="bi bi-arrow-up-right-square"></i> Export</button>
+                </div>
+            </div>
+
+            <div class="col-12 mb-1 row pe-0 m-0">
+                <div class="col-md-2 col-12 p-1">
+                    <div>
+                        <label for="formDateStart" class="form-label form-label-sm mb-0">Từ ngày</label>
+                        <input type="date" class="form-control form-control-sm" id="date_start" value="@ViewBag.FirstDay.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="col-md-2 col-12 p-1">
+                    <div>
+                        <label for="formDateStart" class="form-label form-label-sm mb-0">Đến ngày</label>
+                        <input type="date" class="form-control form-control-sm" id="date_end" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="col-md-2 col-12 p-1">
+                    <div>
+                        <label for="formDateStart" class="form-label form-label-sm mb-0">Trạng thái</label>
+                        <select class="form-control form-control-sm select2" id="order_status">
+                            <option value="-1" selected>==== Tất cả ====</option>
+                            <option value="0">Chờ xác nhận</option>
+                            <option value="1">Đang giao</option>
+                            <option value="2">Hoàn thành</option>
+                            <option value="3">Đã hủy</option>
+                        </select>    
+                    </div>
+                </div>
+                <div class="col-md-2 col-12 p-1">
+                </div>
+                <div class="col-md-4 col-12 p-1">
+                    <label for="request" class="form-label form-label-sm mb-0">Từ khóa</label>
+                    <div class="input-group me-1">
+                        <input id="request" type="text" class="form-control form-control-sm" placeholder="Tìm kiếm">
+                        <button class="btn btn-primary btn-sm" type="button" id="btn_search"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <table class="table table-bordered border-primary font-custom">
+            <thead>
+                <tr class="text-center align-middle">
+                    <th class="table-color" scope="col" style="width: 10%"></th>
+                    <th class="table-color" scope="col">Mã đơn</th>
+                    <th class="table-color" scope="col">Tổng tiền</th>
+                    <th class="table-color" scope="col">Ngày tạo</th>
+                    <th class="table-color" scope="col">Trạng thái</th>
+                    <th class="table-color" scope="col">Tên khách hàng</th>
+                    <th class="table-color" scope="col">Điện thoại</th>
+                    <th class="table-color" scope="col">Địa chỉ</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+
+        @* Phan trang *@
+        <div class="row d-flex justify-content-between">
+            <div class="col-xl-2 col-sm-12 ">
+                <p id="page_details"></p>
+            </div>
+            <div class="col-xl-4 col-sm-12 d-flex justify-content-end me-2">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination" id="pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chi tiết hóa đơn: <span id="modal-mahoadon">MHĐ607554</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modal_reason_cancel" tabindex="-1" aria-labelledby="modal_reason_cancel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" >Lý do hủy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" style="min-height: 150px" id="reason_cancel_order">
+
+                </textarea>
+                <input id="reason_cancel_order_id" type="number" hidden readonly disabled />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="CallAPICancelOrder()">Hủy đơn hàng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/js/admin/order.js"></script>

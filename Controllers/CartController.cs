@@ -121,7 +121,7 @@ namespace CingHuTang.Controllers
                 }
 
 
-                return Json(new { status = 1, message = "Thêm vào giỏ hàng thành công!" });
+                return Json(new { status = 1, message = "Đã thêm vào giỏ hàng!" });
             }
             catch (Exception ex)
             {

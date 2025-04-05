@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Material";
+}
+
+
+
+<div class="card card-custom gutter-b mt-1 ">
+    <div class="card-body">
+
+        <div class="row mt-2 pe-0 me-0">
+            <div class="col-12 mb-2 row pe-0 m-0">
+                <div class="pagetitle col-sm-8 col-12 m-0">
+                    <h1 class="fs-2">Nguyên vật liệu</h1>
+                </div>
+                <div class="col-sm-4 col-12 d-flex justify-content-end pe-0">
+                    <button onclick="DowLoadExcel()" class="btn btn-sm btn-success mb-1" id="ExportExcel"><i class="bi bi-arrow-up-right-square"></i> Export</button>
+                </div>
+            </div>
+
+            <div class="col-12 mb-1 row pe-0 m-0">
+                <div class="col-md-8 col-12 ">
+                   
+                </div>
+                <div class="col-md-4 col-12 ">
+                    <div class="input-group">
+                        <input id="request" type="text" class="form-control form-control-sm" placeholder="Tìm kiếm">
+                        <button class="btn btn-primary btn-sm" type="button" id="btn_search"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <table class="table table-bordered border-primary font-custom">
+            <thead>
+                <tr class="text-center align-middle">
+                    <th class="table-color" scope="col" style="width: 7%;"><button id="add_new" class="btn btn-success" title="Tạo mới"><i class="bi bi-plus-lg"></i></button></th>
+                    <th class="table-color" scope="col">Mã nguyên liệu</th>
+                    <th class="table-color" scope="col">Tên nguyên liệu</th>
+                    <th class="table-color" scope="col">Tồn kho</th>
+                    <th class="table-color" scope="col">Đơn vị</th>
+                    <th class="table-color" scope="col">Số lượng tối thiểu</th>
+                    <th class="table-color" scope="col">Đơn giá</th>
+                    <th class="table-color" scope="col">Nhà cung cấp</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+
+        @* Phan trang *@
+        <div class="row d-flex justify-content-between">
+            <div class="col-xl-2 col-sm-12 ">
+                <p id="page_details"></p>
+            </div>
+            <div class="col-xl-4 col-sm-12 d-flex justify-content-end me-2">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination" id="pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+@* modal *@
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header modal-color pt-2 pb-2">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="CloseModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3" id="form">
+                    <div class="col-sm-8 col-12">
+
+                        <div>
+                            <label for="formCode" class="form-label">Mã nguyên liệu<span style="color: red">*</span></label>
+                            <input type="text" class="form-control form-control-sm" id="formCode">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-12">
+                        <div>
+                            <label for="formMinQuantity" class="form-label">Số lượng tối thiểu<span style="color: red">*</span></label>
+                            <input type="number" class="form-control form-control-sm" id="formMinQuantity">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-8 col-12">
+                        <div>
+                            <label for="formName" class="form-label">Tên nguyên liệu<span style="color: red">*</span></label>
+                            <input type="text" class="form-control form-control-sm" id="formName">
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4 col-12">
+                        <div>
+                            <label for="formUnit" class="form-label">Đơn vị<span style="color: red">*</span></label>
+                            <select class="form-control form-control-sm" id="formUnit" asp-items="@ViewBag.ListUnit">
+                                <option value="0" selected>--Chọn đơn vị--</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12">
+                        <div>
+                            <label for="formDecription" class="form-label">Ghi chú</label>
+                            <textarea class="form-control form-control-sm" style="min-height: 150px" id="formDecription"></textarea>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="modal-footer pt-1 pb-1">
+
+                <div class="row p-0 w-100">
+                    <div class="col-xl-6 col-sm-12 mt-1 p-0">
+                        <button type="button" title="Delete" id="btn_deleteModal" class="btn btn-danger"><i class="bi bi-trash"></i> Xóa</button>
+                    </div>
+
+                    <div class="col-xl-6 col-sm-12 mt-1 d-flex justify-content-end p-0">
+                        <button type="button" class="btn btn-primary" onclick="CreateOrUpdate()"><i class="bi bi-clipboard-check"></i> Lưu</button>
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal" onclick="CloseModal()">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script src="~/js/admin/material.js"></script>

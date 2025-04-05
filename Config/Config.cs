@@ -5,7 +5,7 @@
         private const string strUrlServer = @"https://localhost:7116/";
         public static string Connection()
         {
-            string conn = @"Data Source=MSI\SQLEXPRESS;Initial Catalog=CafeShop;User ID=sang;Password=123456;Trust Server Certificate=True";
+            string conn = @"Data Source=MSI\SQLEXPRESS;Initial Catalog=MilkTeaShop;User ID=sang;Password=123456;Trust Server Certificate=True";
             return conn;
         }
 
