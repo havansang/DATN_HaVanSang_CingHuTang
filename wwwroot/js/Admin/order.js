@@ -96,12 +96,13 @@ function GetAll() {
                                 <btn class="btn btn-sm btn-primary" title="Thành công" ${item.status >= 2 ? "hidden" : ""}  onclick="StatusApproved(${item.id}, 2, 'Hoàn thành đơn hàng')"><i class="bi bi-check-lg"></i></btn>
                             </td>
                             <td scope="col" class="text-center"> <a style="color: blue;  cursor: pointer;" onclick="GetDetails(${item.id}, event)" created-date="${moment(item.createDate).format('DD/MM/YYYY HH:mm:ss')}">${item.orderCode}</a></td>
-                            <td scope="col" class="text-end"> ${item.totalMoney.toLocaleString('en-US') } VNĐ</td>
+                            <td scope="col" class="text-end"> ${(item.totalMoney+25000).toLocaleString('en-US') } VNĐd</td>
                             <td scope="col" class="text-center">${moment(item.createDate).format('DD/MM/YYYY HH:mm:ss')}</td>
                             <td class="text-center" scope="col">${item.status === 0 ? "Chờ xác nhận" : (item.status === 1 ? "Đang giao" : (item.status === 2 ? "Hoàn thành" : "Đã hủy"))}</td>
                             <td scope="col">${item.customerName ?? ""}</td>
                             <td scope="col">${item.phoneNumber ?? ""}</td>
                             <td scope="col">${item.address ?? ""}</td>
+                            <td scope="col">${item.paymentType ?? ""}</td>
                         </tr>`;
             })
 

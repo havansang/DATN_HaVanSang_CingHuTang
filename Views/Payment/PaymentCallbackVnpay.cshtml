@@ -1,0 +1,58 @@
+﻿@model CingHuTang.Models.Vnpay.PaymentResponseModel
+
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd;">
+    <h2>Kết quả thanh toán</h2>
+
+    <div style="margin-top: 20px;">
+        @{
+            var parts = Model.OrderDescription.Split(' ');
+
+       
+            var contentWithoutAmount = string.Join(" ", parts.Take(parts.Length - 1));
+        }
+        <p><strong>Mã đơn hàng:</strong> @Model.OrderId</p>
+        <p><strong>Tổng tiền:</strong> @decimal.Parse(Model.OrderDescription.Split(' ').Last()).ToString("N2") VNĐ</p>
+        <p><strong>Nội dung:</strong> @contentWithoutAmount</p>
+        <p><strong>Mã giao dịch:</strong> @Model.TransactionId</p>
+        <p><strong>Phương thức:</strong> @Model.PaymentMethod</p>
+     
+        <div style="margin-top: 20px; padding: 10px; background-color: @(Model.Success ? "#d4edda" : "#f8d7da")">
+            @if (Model.Success)
+            {
+                <h4 style="color: #155724;">Thanh toán thành công!</h4>
+                <div style="margin-top: 20px;">
+                    <!-- Thẻ a được thay bằng button hoặc gắn sự kiện onclick -->
+                    <a href="#" onclick="submitPendingOrder()"
+                       style="padding: 8px 16px; background: #007bff; color: white; text-decoration: none;">
+                        Về giỏ hàng
+                    </a>
+
+                    <form id="pendingOrderForm" method="post" action="/Order/CreateVnpayOrder" style="display: none;">
+                        <input type="hidden" name="pendingOrderJson" id="pendingOrderInput" />
+                    </form>
+
+                    <script>
+                        function submitPendingOrder() {
+                            const pendingOrder = sessionStorage.getItem('pendingOrder');
+                            if (pendingOrder) {
+                                document.getElementById('pendingOrderInput').value = pendingOrder;
+                            }
+                            document.getElementById('pendingOrderForm').submit();
+                        }
+                    </script>
+
+                </div>
+            }
+            else
+            {
+                <h4 style="color: #721c24;">Thanh toán không thành công</h4>
+                <div style="margin-top: 20px;">
+                    <a asp-controller="Cart" asp-action="Index"
+                       style="padding: 8px 16px; background: #007bff; color: white; text-decoration: none;">
+                        Về giỏ hàng
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

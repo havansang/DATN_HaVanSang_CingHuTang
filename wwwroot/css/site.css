@@ -20,8 +20,7 @@ html {
 body {
     margin-bottom: 60px;
 }
-
-
+/* Thêm vào file site.css hoặc file CSS tương ứng */
 header {
     position: fixed;
     top: 0;
@@ -34,18 +33,18 @@ header {
     background-color: white !important;
 }
 
-
+/* Thêm padding cho body để nội dung không bị che */
 body {
-    padding-top: 70px; 
+    padding-top: 70px; /* Điều chỉnh theo chiều cao thực tế của header */
 }
 
-
+/* Style khi cuộn trang */
 header.scrolled {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     background-color: rgba(255, 255, 255, 0.98) !important;
 }
 
-
+/* Điều chỉnh cho mobile */
 @media (max-width: 992px) {
     header {
         position: relative;

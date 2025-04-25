@@ -4,6 +4,8 @@
     var Id = Context.Session.GetInt32("AccountId");
 
     var Role = Context.Session.GetInt32("AccountRole");
+
+    var Wallet = 100.0;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +60,14 @@
                     </div>
                     <div class="navbar align-self-center d-flex">
                         <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3 pe-1">
+                        </div>
+                        <div class="d-flex align-items-center" style="padding-right: 40px">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                <path d="M19 7H5C3.34315 7 2 8.34315 2 10V18C2 19.6569 3.34315 21 5 21H19C20.6569 21 22 19.6569 22 18V10C22 8.34315 20.6569 7 19 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M16 7V5C16 3.89543 15.1046 3 14 3H10C8.89543 3 8 3.89543 8 5V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M22 12H18C16.8954 12 16 12.8954 16 14V14C16 15.1046 16.8954 16 18 16H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="fw-medium" id="total_money_in_wallet"></span>
                         </div>
                         @if (Id > 0)
                         {

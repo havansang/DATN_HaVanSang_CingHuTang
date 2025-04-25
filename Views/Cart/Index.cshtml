@@ -77,12 +77,112 @@
             <div class="text-center">
                 <div class="mt-2 mt-sm-0">
                     <button class="btn btn-success" onclick="CreateOrder()">
-                        <i class="mdi mdi-cart-outline me-1"></i> Đặt hàng
+                        <i class="mdi mdi-cart-outline me-1"></i> Đặt hàng(Thanh toán COD)
                     </button>
                 </div>
+                <div class="mt-2 mt-sm-0" style="margin-top: 10px !important">
+                    <button class="btn btn-success" onclick="CreateOrders()">
+                        <i class="mdi mdi-cart-outline me-1"></i> Thanh toán bằng Vnpay
+                    </button>
+                </div>
+                
+                <div class="mt-2 mt-sm-0" style="margin-top: 10px !important">
+                    <button class="btn btn-success" onclick="CreateOrderByWallet()">
+                        <i class="mdi mdi-cart-outline me-1"></i> Thanh toán bằng số dư ví
+                    </button>
+                </div>
+                
             </div>
         </div>
     </div>
 
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function () {
+            const totalMoneyText = document.getElementById("total_money").innerText;
+            const numericValue = totalMoneyText.replace(/[^\d]/g, "");
+            document.querySelector("input[name='Amount']").value = numericValue;
+        });
+    });
+</script>
 <script src="~/js/client/cart.js"></script>
+<script>
+        function CreateOrders() {
+
+        let cusName = $("#customer_name").val();
+        let cusAddress = $("#customer_address").val();
+        let cusPhone = $("#customer_phone").val();
+        let accountId = $("#accountId").val();
+        if (cusName.length <= 0) {
+            alert("Hãy nhập tên người mua!");
+            return;
+        }
+        if (cusPhone.length <= 0) {
+            alert("Hãy nhập số điện thoại!");
+            return;
+        }
+        if (cusAddress.length <= 0) {
+            alert("Hãy nhập địa chỉ!");
+            return;
+        }
+        if (accountId <= 0) {
+            alert("Hãy đăng nhập để sử dụng tính năng!");
+            return;
+        }
+
+        let elQuantity = $(".quantity");
+        let elProductDetailId = $(".productDetailId");
+        let elTotalMoney = $(".totalPrice");
+        let arrDetail = [];
+        for (let i = 0; i < elQuantity.length; i++) {
+            let arrTopping = [];
+            $.each($(`.topping_price_${i}`), function (index, item) {
+                let objTopping = {
+                    ToppingId: parseInt($(item).attr("toppingId")),
+                    ToppingPrice: parseInt($(item).attr("toppingPrice")),
+                }
+                arrTopping.push(objTopping);
+            });
+
+
+
+            let objDetail = {
+                Quantity: parseInt($(elQuantity[i]).val()),
+                TotalMoney: parseFloat($(elTotalMoney[i]).val()),
+                ProductDetailId: parseInt($(elProductDetailId[i]).val()),
+                LstTopping: arrTopping
+            }
+            arrDetail.push(objDetail);
+        }
+        let obj = {
+            Details: arrDetail,
+            CustomerName: cusName,
+            PhoneNumber: cusPhone,
+            Address: cusAddress,
+            AccountId: accountId
+        }
+        let obj1 = {
+            Name: "Hà Văn Sáng",
+            OrderDescription:"Thanh toán qua Vnpay",
+            Amount:parseFloat(elTotalMoney),
+            OrderType:"100000"
+        }
+        sessionStorage.setItem('pendingOrder', JSON.stringify(obj));
+        const totalMoneyText = document.getElementById("total_money").innerText;
+        const numericValue = totalMoneyText.replace(/[^\d]/g, "");
+        let tong = numericValue;
+        let nd = "Thanh toán qua Vnpay";
+        let ma = "100000";
+
+        const params = new URLSearchParams();
+        params.append('cusName', cusName);
+        params.append('nd', nd);
+        params.append('tong', tong);
+        params.append('ma', ma);
+
+        // Chuyển hướng
+        window.location.href = `/Payment/CreatePaymentUrlVnpay1?${params.toString()}`;
+    }
+</script>

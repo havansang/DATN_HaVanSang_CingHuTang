@@ -2,7 +2,6 @@
     GetAll();
 });
 
-
 function GetAll() {
     $.ajax({
         url: "/Cart/GetCartByAccountId",
@@ -157,6 +156,7 @@ function reset() {
     $("#customer_address").val("");
     $("#customer_phone").val("");
 }
+
 function CreateOrder() {
 
     let cusName = $("#customer_name").val();
@@ -231,7 +231,95 @@ function CreateOrder() {
         });
     }
 }
+function CreateOrderByWallet() {
 
+    let cusName = $("#customer_name").val();
+    let cusAddress = $("#customer_address").val();
+    let cusPhone = $("#customer_phone").val();
+    let accountId = $("#accountId").val();
+    if (cusName.length <= 0) {
+        alert("Hãy nhập tên người mua!");
+        return;
+    }
+    if (cusPhone.length <= 0) {
+        alert("Hãy nhập số điện thoại!");
+        return;
+    }
+    if (cusAddress.length <= 0) {
+        alert("Hãy nhập địa chỉ!");
+        return;
+    }
+    if (accountId <= 0) {
+        alert("Hãy đăng nhập để sử dụng tính năng!");
+        return;
+    }
+
+    const totalMoneyText = document.getElementById("total_money").innerText;
+    const numericValue = parseFloat(totalMoneyText.replace(/[^\d]/g, ""));
+
+    const totalMoneyWalletText = document.getElementById("total_money_in_wallet").innerText;
+    const numericWalletValue = parseFloat(totalMoneyWalletText.replace(/[^\d]/g, ""));
+
+    if (numericValue > numericWalletValue) {
+        alert("Số dư ví không đủ!");
+        return;
+    }
+
+    let elQuantity = $(".quantity");
+    let elProductDetailId = $(".productDetailId");
+    let elTotalMoney = $(".totalPrice");
+    let arrDetail = [];
+    for (let i = 0; i < elQuantity.length; i++) {
+        let arrTopping = [];
+        $.each($(`.topping_price_${i}`), function (index, item) {
+            let objTopping = {
+                ToppingId: parseInt($(item).attr("toppingId")),
+                ToppingPrice: parseInt($(item).attr("toppingPrice")),
+            }
+            arrTopping.push(objTopping);
+        });
+
+
+
+        let objDetail = {
+            Quantity: parseInt($(elQuantity[i]).val()),
+            TotalMoney: parseFloat($(elTotalMoney[i]).val()),
+            ProductDetailId: parseInt($(elProductDetailId[i]).val()),
+            LstTopping: arrTopping
+        }
+        arrDetail.push(objDetail);
+    }
+    let obj = {
+        Details: arrDetail,
+        CustomerName: cusName,
+        PhoneNumber: cusPhone,
+        Address: cusAddress,
+        AccountId: accountId
+    }
+    let objFinal = {
+        content: obj,
+        togntien: numericValue
+    }
+    if (confirm("Bạn có muốn xác nhận đơn hàng này không?")) {
+        $.ajax({
+            type: 'POST',
+            url: "/Order/CreateOrderByWallet",
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify(objFinal),
+            success: function (result) {
+                if (result.status == 1) {
+                    reset();
+                }
+                alert(result.message)
+                GetAll();
+                TotalMoney();
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    }
+}
 function decreaseValue(event, index) {
     var el = $(event.target);
     let elInput = $(el).closest("div").find(".product-number");

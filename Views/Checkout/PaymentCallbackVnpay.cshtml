@@ -1,0 +1,27 @@
+﻿<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd;">
+    <h2>Kết quả thanh toán</h2>
+
+    <div style="margin-top: 20px;">
+        <p><strong>Mã đơn hàng:</strong> @Model.OrderId</p>
+        <p><strong>Mô tả:</strong> @Model.OrderDescription</p>
+        <p><strong>Mã giao dịch:</strong> @Model.TransactionId</p>
+        <p><strong>Phương thức:</strong> @Model.PaymentMethod</p>
+        <p><strong>Mã ngân hàng:</strong> @Model.PaymentId</p>
+        <p><strong>Mã phản hồi:</strong> @Model.VnPayResponseCode</p>
+
+        <div style="margin-top: 20px; padding: 10px; background-color: @(Model.Success ? "#d4edda" : "#f8d7da")">
+            @if (Model.Success)
+            {
+                    <h4 style="color: #155724;">Thanh toán thành công!</h4>
+            }
+            else
+            {
+                    <h4 style="color: #721c24;">Thanh toán không thành công</h4>
+            }
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="/" style="padding: 8px 16px; background: #007bff; color: white; text-decoration: none;">Về trang chủ</a>
+    </div>
+</div>

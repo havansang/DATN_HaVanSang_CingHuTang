@@ -1,3 +1,5 @@
+using CingHuTang.Services.Vnpay;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,7 +13,11 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddControllersWithViews();
+//Conect Vnpay API
+builder.Services.AddScoped<IVnPayService, VnPayService>();
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -40,4 +40,6 @@ public partial class Account
     public string? UpdatedBy { get; set; }
 
     public bool IsDelete { get; set; }
+
+    public decimal? Wallet { get; set; }
 }

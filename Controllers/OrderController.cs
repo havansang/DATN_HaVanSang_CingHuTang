@@ -4,6 +4,8 @@ using CingHuTang.Config;
 using Microsoft.AspNetCore.Mvc;
 using CingHuTang.Repository;
 using CingHuTang.Reposiory;
+using Newtonsoft.Json;
+using Azure.Core;
 
 namespace CingHuTang.Controllers
 {
@@ -100,6 +102,7 @@ namespace CingHuTang.Controllers
                 newOrder.CreateBy =  accout.FullName;
                 newOrder.AccountId = data.AccountId;
                 newOrder.IsDeleted = false;
+                newOrder.PaymentType = "COD";
 
                 await _repo.CreateAsync(newOrder);
 
@@ -151,6 +154,160 @@ namespace CingHuTang.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateVnpayOrder(string pendingOrderJson)
+        {
+            var data = JsonConvert.DeserializeObject<OrderDto>(pendingOrderJson);
+            try
+            {
+                Account accout = _accRepo.GetByID(TextUtils.ToInt(data.AccountId)) ?? new Account();
+                if (accout.Id <= 0) return Json(new { status = 0, message = "Đăng nhập để sử dụng tính năng này!" });
+                if (data.Details == null || data.Details.Count <= 0) return Json(new { status = 0, message = "Hãy chọn ít nhất 1 sản phẩm để tạo đơn hàng!" });
+
+
+
+                Order newOrder = new Order();
+
+                newOrder.OrderCode = LoadCode();
+                newOrder.CustomerName = data.CustomerName;
+                newOrder.PhoneNumber = data.PhoneNumber;
+                newOrder.Address = data.Address;
+                newOrder.Status = 0;
+                newOrder.CreateDate = newOrder.UpdatedDate = DateTime.Now;
+                newOrder.CreateBy = accout.FullName;
+                newOrder.AccountId = data.AccountId;
+                newOrder.IsDeleted = false;
+                newOrder.PaymentType = "VnPay";
+
+                await _repo.CreateAsync(newOrder);
+
+                foreach (var item in data.Details)
+                {
+                    OrderDetail newOderDetails = new OrderDetail();
+                    newOderDetails.Quantity = item.Quantity;
+                    newOderDetails.TotalMoney = item.TotalMoney;
+                    newOderDetails.ProductDetailId = item.ProductDetailId;
+                    newOderDetails.OrderId = newOrder.Id;
+                    newOderDetails.CreatedDate = DateTime.Now;
+                    newOderDetails.CreatedBy = accout.FullName;
+                    newOderDetails.IsDelete = false;
+                    await _detailRepo.CreateAsync(newOderDetails);
+
+                    foreach (var topping in item.LstTopping)
+                    {
+                        OrderDetailsTopping newTopping = new OrderDetailsTopping()
+                        {
+                            OrderDetailsId = newOderDetails.Id,
+                            ToppingId = topping.ToppingId,
+                            ToppingPrice = topping.ToppingPrice,
+                            CreatedDate = DateTime.Now,
+                            CreatedBy = accout.FullName + "_" + accout.Id.ToString(),
+                            UpdatedDate = DateTime.Now,
+                            UpdatedBy = accout.FullName + "_" + accout.Id.ToString(),
+                        };
+                        _detailToppingRepo.Create(newTopping);
+                    }
+
+                }
+
+
+                List<Cart> lstCart = _cartRepo.GetAll().Where(p => p.AccountId == accout.Id).ToList();
+                if (lstCart.Count > 0)
+                {
+                    string stringCartIDs = string.Join(",", lstCart.Select(p => p.Id));
+                    SQLHelper<CartTopping>.SqlToModel($"DELETE dbo.CartTopping WHERE CartID IN ({stringCartIDs})");
+                }
+                SQLHelper<Cart>.SqlToModel($"DELETE FROM Cart WHERE AccountID = {accout.Id}");
+
+                return RedirectToAction("Index", "Cart");
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { status = 0, message = ex.Message });
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> CreateOrderByWallet([FromBody] CreateOrderByWalletDto dl)
+        {
+            try
+            {
+                OrderDto data = dl.Content;
+                decimal tongTien = (decimal)dl.Togntien;
+
+                Account accout = _accRepo.GetByID(TextUtils.ToInt(data.AccountId)) ?? new Account();
+                if (accout.Id <= 0) return Json(new { status = 0, message = "Đăng nhập để sử dụng tính năng này!" });
+                if (data.Details == null || data.Details.Count <= 0) return Json(new { status = 0, message = "Hãy chọn ít nhất 1 sản phẩm để tạo đơn hàng!" });
+
+
+
+                Order newOrder = new Order();
+
+                newOrder.OrderCode = LoadCode();
+                newOrder.CustomerName = data.CustomerName;
+                newOrder.PhoneNumber = data.PhoneNumber;
+                newOrder.Address = data.Address;
+                newOrder.Status = 0;
+                newOrder.CreateDate = newOrder.UpdatedDate = DateTime.Now;
+                newOrder.CreateBy = accout.FullName;
+                newOrder.AccountId = data.AccountId;
+                newOrder.IsDeleted = false;
+                newOrder.PaymentType = "Wallet";
+
+                await _repo.CreateAsync(newOrder);
+
+                foreach (var item in data.Details)
+                {
+                    OrderDetail newOderDetails = new OrderDetail();
+                    newOderDetails.Quantity = item.Quantity;
+                    newOderDetails.TotalMoney = item.TotalMoney;
+                    newOderDetails.ProductDetailId = item.ProductDetailId;
+                    newOderDetails.OrderId = newOrder.Id;
+                    newOderDetails.CreatedDate = DateTime.Now;
+                    newOderDetails.CreatedBy = accout.FullName;
+                    newOderDetails.IsDelete = false;
+                    await _detailRepo.CreateAsync(newOderDetails);
+
+                    foreach (var topping in item.LstTopping)
+                    {
+                        OrderDetailsTopping newTopping = new OrderDetailsTopping()
+                        {
+                            OrderDetailsId = newOderDetails.Id,
+                            ToppingId = topping.ToppingId,
+                            ToppingPrice = topping.ToppingPrice,
+                            CreatedDate = DateTime.Now,
+                            CreatedBy = accout.FullName + "_" + accout.Id.ToString(),
+                            UpdatedDate = DateTime.Now,
+                            UpdatedBy = accout.FullName + "_" + accout.Id.ToString(),
+                        };
+                        _detailToppingRepo.Create(newTopping);
+                    }
+
+                }
+
+
+                List<Cart> lstCart = _cartRepo.GetAll().Where(p => p.AccountId == accout.Id).ToList();
+                if (lstCart.Count > 0)
+                {
+                    string stringCartIDs = string.Join(",", lstCart.Select(p => p.Id));
+                    SQLHelper<CartTopping>.SqlToModel($"DELETE dbo.CartTopping WHERE CartID IN ({stringCartIDs})");
+                }
+                SQLHelper<Cart>.SqlToModel($"DELETE FROM Cart WHERE AccountID = {accout.Id}");
+
+                accout.Wallet = accout.Wallet - tongTien;
+                _accRepo.Update(accout);
+
+                return Json(new { status = 1, message = "Đặt hàng thành công!" });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { status = 0, message = ex.Message });
+            }
+
+        }
         public string LoadCode()
         {
             int currentYear = DateTime.Now.Year;

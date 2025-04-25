@@ -26,7 +26,7 @@ function GetAll() {
             //var html = '';
             let htmlCard = '';
             $.each(data.data, function (index, item) {
-                let btnAprroved = `<button type="button" class = "btn btn-sm btn-danger fw-bold" onclick="StatusApproved(${item.id},3)">Hủy đơn hàng</button>`;
+                let btnAprroved = `<button type="button" class = "btn btn-sm btn-danger fw-bold" onclick="StatusApproved(${item.id},3,${item.totalMoney})">Hủy đơn hàng</button>`;
 
                 //html += `<tr class="align-middle">
                 //            <td scope="col" class="text-center"><a style="color: blue;  cursor: pointer; text-decoration: none;"  href="/Order/OrderDetails?OrderId=${item.id}">${item.orderCode}</a></td>
@@ -71,7 +71,9 @@ function GetAll() {
                                                         <li class="">
                                                            <i class="bi bi-telephone"></i>  <span class="fw-bold">Điện thoại:</span> ${item.phoneNumber}
                                                         </li>
-                                                        
+                                                        <li class="">
+                                                           <i class="bi bi-cash"></i>  <span class="fw-bold">Phương thức thanh toán:</span> ${item.paymentType}
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -100,7 +102,7 @@ function GetAll() {
                                                        <span class="align-middle">Tổng tiền:</span>
                                                     </h5>
                                                     <h5 class="mb-2">
-                                                       <span class="align-middle text-danger fw-bold">${item.totalMoney.toLocaleString('en-US')} VNĐ</span>
+                                                       <span class="align-middle text-danger fw-bold">${(item.totalMoney+25000).toLocaleString('en-US')} VNĐ</span>
                                                     </h5>
                                                     
                                                     <div class="d-flex justify-content-end">
@@ -134,13 +136,13 @@ $('#request').keydown(function (e) {
     }
 })
 
-function StatusApproved(orderId, status) {
+function StatusApproved(orderId, status, totalMoney) {
     if (confirm(`Ban có chắc muốn xác nhận hủy đơn hàng này không?`)) {
         $.ajax({
             type: 'GET',
             url: "/Admin/Order/ChangeStatusOrder",
             contentType: 'application/json;charset=utf-8',
-            data: { orderId, status },
+            data: { orderId, status, totalMoney },
             success: function (result) {
                 if (result.status != 1) {
                     alert(result.message)

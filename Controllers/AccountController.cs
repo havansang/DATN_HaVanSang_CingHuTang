@@ -54,5 +54,13 @@ namespace CingHuTang.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public JsonResult GetMoneyInWallet()
+        {
+            Account acc = _accRepo.GetByID(HttpContext.Session.GetInt32("AccountId") ?? 0) ?? new Account();
+            decimal? data = acc.Wallet;
+            return Json(data == null ? 0 : data?.ToString("N0"));
+        }
     }
 }

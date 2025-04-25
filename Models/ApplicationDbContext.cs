@@ -82,6 +82,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Role).HasComment("1: Khách hàng, 2: admin, 3: nhân viên, 4: chủ cửa hàng");
             entity.Property(e => e.UpdatedBy).HasMaxLength(150);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Wallet).HasColumnType("decimal(18, 2)");
         });
 
         modelBuilder.Entity<Cart>(entity =>
@@ -224,6 +225,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.CreateDate).HasColumnType("datetime");
             entity.Property(e => e.CustomerName).HasMaxLength(250);
             entity.Property(e => e.OrderCode).HasMaxLength(250);
+            entity.Property(e => e.PaymentType).HasMaxLength(50);
             entity.Property(e => e.PhoneNumber).HasMaxLength(250);
             entity.Property(e => e.Status).HasComment("0: Chờ xác nhận; 1: Đang giao; 2: Thành công; 3: Hủy hàng");
             entity.Property(e => e.UpdatedBy).HasMaxLength(150);

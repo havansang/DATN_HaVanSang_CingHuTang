@@ -13,6 +13,7 @@ namespace CingHuTang.Areas.Admin.Controllers
     {
         public OrderRepository _repo = new OrderRepository();
         public AccountRepository _accRepo = new AccountRepository();
+        public OrderDetailsRepository _orderDetailRepo =new OrderDetailsRepository();
         public IActionResult Index()
         {
             Account acc = _accRepo.GetByID(HttpContext.Session.GetInt32("AccountId") ?? 0) ?? new Account();
@@ -50,16 +51,27 @@ namespace CingHuTang.Areas.Admin.Controllers
             }
             return Json(new { lst, data });
         }
-        public JsonResult ChangeStatusOrder(int orderId, int status, string reasonCancel = "")
+        public JsonResult ChangeStatusOrder(int orderId, int status, decimal totalMoney, string reasonCancel = "")
         {
             Order model = _repo.GetByID(orderId) ?? new Order();
+            Account acc = _accRepo.GetByID(HttpContext.Session.GetInt32("AccountId") ?? 0) ?? new Account();
+           
             string statusText = status == 1 ? "giao" : (status == 2 ? "xác nhận" : "hủy");
             if (model.Id <= 0) return Json(new { status = 0, message = "Không thể tìm thấy đơn hàng!" });
 
             if (model.Status == status) return Json(new { status = 0, message = $"Đơn hàng đã được {statusText}!" });
             model.Status = status;
             model.ReasonCancel = TextUtils.ToString(reasonCancel);
+            if (totalMoney > 0)
+            {
+                acc.Wallet = acc.Wallet + totalMoney+25000;
+            }
+            else
+            {
+                acc.Wallet = acc.Wallet + 1;
+            }
             _repo.Update(model);
+            _accRepo.Update(acc);
             return Json(new { status = 1, message = $"Thành công!" });
         }
 
