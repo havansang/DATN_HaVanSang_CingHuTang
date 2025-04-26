@@ -121,11 +121,21 @@ function chageQuantity(el, index) {
 }
 function TotalMoney() {
     let totalMoney = 0;
+    // Lấy nội dung text của thẻ span
+    const priceText = document.getElementById('shipping_charge').textContent;
+
+    // Xử lý chuyển đổi sang số
+    const priceNumber = parseInt(
+        priceText
+            //.replace(/\./g, '')     // Xóa dấu chấm phân cách hàng nghìn
+            //.replace(',', '.')      // Thay dấu phẩy thập phân bằng dấu chấm
+            .replace(/[^\d]/g, '') // Xóa tất cả ký tự không phải số và dấu chấm
+    );
     $(".totalPrice").each((index, el) => {
         totalMoney += parseFloat($(el).val()) || 0;
     });
     $("#sub_total").html(`${totalMoney.toLocaleString('en-US')} VNĐ`)
-    $("#total_money").html(`${(totalMoney + 25000).toLocaleString('en-US')} VNĐ`)
+    $("#total_money").html(`${(totalMoney + priceNumber).toLocaleString('en-US')} VNĐ`)
 }
 
 function DeleteProductCart(Id, index) {
@@ -163,6 +173,12 @@ function CreateOrder() {
     let cusAddress = $("#customer_address").val();
     let cusPhone = $("#customer_phone").val();
     let accountId = $("#accountId").val();
+
+    const priceText = document.getElementById('shipping_charge').textContent;
+    const priceNumber = parseFloat(
+        priceText
+            .replace(/[^\d]/g, '') // Xóa tất cả ký tự không phải số và dấu chấm
+    );
     if (cusName.length <= 0) {
         alert("Hãy nhập tên người mua!");
         return;
@@ -209,7 +225,8 @@ function CreateOrder() {
         CustomerName: cusName,
         PhoneNumber: cusPhone,
         Address: cusAddress,
-        AccountId: accountId
+        AccountId: accountId,
+        ShippingFee: priceNumber
     }
     if (confirm("Bạn có muốn xác nhận đơn hàng này không?")) {
         $.ajax({
@@ -237,6 +254,12 @@ function CreateOrderByWallet() {
     let cusAddress = $("#customer_address").val();
     let cusPhone = $("#customer_phone").val();
     let accountId = $("#accountId").val();
+
+    const priceText = document.getElementById('shipping_charge').textContent;
+    const priceNumber = parseFloat(
+        priceText
+            .replace(/[^\d]/g, '') // Xóa tất cả ký tự không phải số và dấu chấm
+    );
     if (cusName.length <= 0) {
         alert("Hãy nhập tên người mua!");
         return;
@@ -294,7 +317,8 @@ function CreateOrderByWallet() {
         CustomerName: cusName,
         PhoneNumber: cusPhone,
         Address: cusAddress,
-        AccountId: accountId
+        AccountId: accountId,
+        ShippingFee: priceNumber
     }
     let objFinal = {
         content: obj,

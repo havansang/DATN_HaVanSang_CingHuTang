@@ -64,7 +64,7 @@ namespace CingHuTang.Areas.Admin.Controllers
             model.ReasonCancel = TextUtils.ToString(reasonCancel);
             if (totalMoney > 0)
             {
-                acc.Wallet = acc.Wallet + totalMoney+25000;
+                acc.Wallet = acc.Wallet + totalMoney;
             }
             else
             {

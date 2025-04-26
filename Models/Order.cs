@@ -35,4 +35,6 @@ public partial class Order
     public bool? IsDeleted { get; set; }
 
     public string? PaymentType { get; set; }
+
+    public decimal? ShippingFee { get; set; }
 }

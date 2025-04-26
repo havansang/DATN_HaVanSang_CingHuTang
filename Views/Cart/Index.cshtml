@@ -2,6 +2,18 @@
     ViewData["Title"] = "CheckOut";
 
     var AccountId = ViewBag.Account.Id;
+    string formattedFee = "";
+    try{
+        int fee = Convert.ToInt32(ViewBag.fee);
+        int roundedFee = (int)Math.Ceiling(fee / 100.0) * 100;
+
+        // Định dạng với dấu phân cách hàng nghìn
+         formattedFee = roundedFee.ToString("N0", new System.Globalization.CultureInfo("en-US"));
+    }
+    catch
+    {
+         formattedFee = "Nhập lại địa chỉ";
+    }
 }
 
 <link href="~/css/client/cart.css" rel="stylesheet" />
@@ -32,17 +44,17 @@
                     <div class="card-header bg-transparent border-bottom py-3 px-4">
                         <div class="col-12">
                             <label for="customer_name" class="form-label form-label-sm mb-0">Tên<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="customer_name" autocomplete="off">
+                            <input type="text" class="form-control form-control-sm" id="customer_name" autocomplete="off" value="@ViewBag.Account.FullName">
                         </div>
 
                         <div class="col-12">
                             <label for="customer_phone" class="form-label form-label-sm mb-0">Điện thoại<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="customer_phone" autocomplete="off">
+                            <input type="text" class="form-control form-control-sm" id="customer_phone" autocomplete="off" value="@ViewBag.Account.PhoneNumber">
                         </div>
 
                         <div class="col-12">
                             <label for="customer_address" class="form-label form-label-sm mb-0">Địa chỉ<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="customer_address" autocomplete="off">
+                            <input type="text" class="form-control form-control-sm" id="customer_address" autocomplete="off" value="@ViewBag.Account.Address">
                         </div>
                     </div>
                     <div class="card-body p-4 pt-2">
@@ -58,7 +70,7 @@
                                     </tr>
                                     <tr>
                                         <td>Phí vận chuyển:</td>
-                                        <td class="text-end" id="shipping_charge">25,000 VNĐ</td>
+                                        <td class="text-end" id="shipping_charge">@formattedFee VNĐ</td>
                                     </tr>
                                     <tr class="bg-light">
                                         <th>Tổng:</th>
@@ -97,6 +109,59 @@
     </div>
 
 </div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Biến để kiểm tra địa chỉ có thay đổi không
+            let lastAddress = '';
+
+            // Sự kiện blur - khi click ra ngoài ô input
+            $('#customer_address').on('blur', async function() {
+                const currentAddress = $(this).val().trim();
+
+                // Chỉ tính toán nếu địa chỉ thay đổi và không rỗng
+                if (currentAddress && currentAddress !== lastAddress) {
+                    try {
+                        // Hiển thị trạng thái đang tính toán
+                        //$('#dis').text("Đang tính...");
+                        $('#shipping_charge').text("Đang tính...");
+
+                        const response = await fetch('/Distance/CalculateShippingFee', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: `deliveryAddress=${encodeURIComponent(currentAddress)}`
+                        });
+
+                        const data = await response.json();
+
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            //$('#shipping_charge').text(`${data.fee.toLocaleString()} VNĐ`);
+                                const roundedFee = Math.ceil(data.fee / 100) * 100;
+                            $('#shipping_charge').text(roundedFee.toLocaleString('en-US') + ' VNĐ');
+
+                                 const total = parseFloat($('#sub_total').text().replace(/[^\d,]/g, '').replace(',', '.')) +
+                                parseFloat($('#shipping_charge').text().replace(/[^\d,]/g, '').replace(',', '.'));
+                                        const formattedTotal = total.toLocaleString('vi-VN', {
+                                          minimumFractionDigits: 3,
+                                          maximumFractionDigits: 3
+                                        }).replace(/\./g, '');
+
+                            $('#total_money').text(formattedTotal.toLocaleString('en-US') + ' VNĐ');
+                            // Lưu lại địa chỉ vừa tính toán
+                            lastAddress = currentAddress;
+                        }
+                    } catch (error) {
+                        console.error("Lỗi:", error);
+                        $('#shipping_charge').text("Lỗi tính phí");
+                    }
+                }
+            });
+        });
+    </script>
+}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
@@ -115,6 +180,12 @@
         let cusAddress = $("#customer_address").val();
         let cusPhone = $("#customer_phone").val();
         let accountId = $("#accountId").val();
+
+        const priceText = document.getElementById('shipping_charge').textContent;
+        const priceNumber = parseFloat(
+        priceText
+            .replace(/[^\d]/g, '') // Xóa tất cả ký tự không phải số và dấu chấm
+    );
         if (cusName.length <= 0) {
             alert("Hãy nhập tên người mua!");
             return;
@@ -161,7 +232,8 @@
             CustomerName: cusName,
             PhoneNumber: cusPhone,
             Address: cusAddress,
-            AccountId: accountId
+            AccountId: accountId,
+            ShippingFee: priceNumber
         }
         let obj1 = {
             Name: "Hà Văn Sáng",

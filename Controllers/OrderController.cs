@@ -103,6 +103,7 @@ namespace CingHuTang.Controllers
                 newOrder.AccountId = data.AccountId;
                 newOrder.IsDeleted = false;
                 newOrder.PaymentType = "COD";
+                newOrder.ShippingFee= data.ShippingFee;
 
                 await _repo.CreateAsync(newOrder);
 
@@ -178,6 +179,7 @@ namespace CingHuTang.Controllers
                 newOrder.AccountId = data.AccountId;
                 newOrder.IsDeleted = false;
                 newOrder.PaymentType = "VnPay";
+                newOrder.ShippingFee = data.ShippingFee;
 
                 await _repo.CreateAsync(newOrder);
 
@@ -255,6 +257,7 @@ namespace CingHuTang.Controllers
                 newOrder.AccountId = data.AccountId;
                 newOrder.IsDeleted = false;
                 newOrder.PaymentType = "Wallet";
+                newOrder.ShippingFee = data.ShippingFee;
 
                 await _repo.CreateAsync(newOrder);
 

@@ -26,7 +26,7 @@ function GetAll() {
             //var html = '';
             let htmlCard = '';
             $.each(data.data, function (index, item) {
-                let btnAprroved = `<button type="button" class = "btn btn-sm btn-danger fw-bold" onclick="StatusApproved(${item.id},3,${item.totalMoney})">Hủy đơn hàng</button>`;
+                let btnAprroved = `<button type="button" class = "btn btn-sm btn-danger fw-bold" onclick="StatusApproved(${item.id},3,${item.totalMoney + item.shippingFee})">Hủy đơn hàng</button>`;
 
                 //html += `<tr class="align-middle">
                 //            <td scope="col" class="text-center"><a style="color: blue;  cursor: pointer; text-decoration: none;"  href="/Order/OrderDetails?OrderId=${item.id}">${item.orderCode}</a></td>
@@ -102,7 +102,7 @@ function GetAll() {
                                                        <span class="align-middle">Tổng tiền:</span>
                                                     </h5>
                                                     <h5 class="mb-2">
-                                                       <span class="align-middle text-danger fw-bold">${(item.totalMoney+25000).toLocaleString('en-US')} VNĐ</span>
+                                                       <span class="align-middle text-danger fw-bold">${(item.totalMoney + item.shippingFee).toLocaleString('en-US')} VNĐ</span>
                                                     </h5>
                                                     
                                                     <div class="d-flex justify-content-end">

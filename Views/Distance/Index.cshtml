@@ -1,0 +1,66 @@
+﻿<!-- Views/Order/Index.cshtml -->
+@{
+    ViewBag.Title = "Tính phí vận chuyển";
+}
+
+<h2>Đặt hàng</h2>
+
+<div class="form-group">
+    <label for="deliveryAddress">Địa chỉ giao hàng:</label>
+    <input type="text" id="deliveryAddress" class="form-control" placeholder="Nhập địa chỉ của bạn" />
+</div>
+
+<div class="form-group">
+    <label>Khoảng cách:</label>
+    <span id="dis" style="font-weight: bold;">0 đ</span>
+</div>
+<div class="form-group">
+    <label>Phí vận chuyển:</label>
+    <span id="shippingFee" style="font-weight: bold;">0 đ</span>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Biến để kiểm tra địa chỉ có thay đổi không
+            let lastAddress = '';
+
+            // Sự kiện blur - khi click ra ngoài ô input
+            $('#deliveryAddress').on('blur', async function() {
+                const currentAddress = $(this).val().trim();
+
+                // Chỉ tính toán nếu địa chỉ thay đổi và không rỗng
+                if (currentAddress && currentAddress !== lastAddress) {
+                    try {
+                        // Hiển thị trạng thái đang tính toán
+                        $('#dis').text("Đang tính...");
+                        $('#shippingFee').text("Đang tính...");
+
+                        const response = await fetch('/Distance/CalculateShippingFee', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: `deliveryAddress=${encodeURIComponent(currentAddress)}`
+                        });
+
+                        const data = await response.json();
+
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            // Cập nhật UI với kết quả mới
+                            $('#dis').text(data.distance.toFixed(2) + ' m');
+                            $('#shippingFee').text(`${data.fee.toLocaleString()} đ`);
+
+                            // Lưu lại địa chỉ vừa tính toán
+                            lastAddress = currentAddress;
+                        }
+                    } catch (error) {
+                        console.error("Lỗi:", error);
+                        $('#shippingFee').text("Lỗi tính phí");
+                    }
+                }
+            });
+        });
+    </script>
+}
