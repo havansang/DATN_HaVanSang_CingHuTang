@@ -1,0 +1,43 @@
+﻿/* Rating stars */
+.rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    text-align: left;
+}
+
+    .rating > input {
+        display: none;
+    }
+
+    .rating > label {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        width: 1.5em;
+        cursor: pointer;
+        color: #ddd;
+        font-size: 1.5rem;
+    }
+
+/*        .rating > label:before {
+            content: '<i class="bi bi-star-fill"></i>';
+            position: absolute;
+            opacity: 0;
+        }*/
+    .rating label i {
+/*        font-size: 2rem;*/
+        color: gray; /* mặc định màu xám */
+        transition: color 0.2s;
+    }
+
+    .rating label.filled i {
+        color: gold; /* màu vàng khi đầy */
+    }
+
+        .rating > label:hover:before,
+        .rating > label:hover ~ label:before,
+        .rating > input:checked ~ label:before {
+            opacity: 1;
+            color: #ffc107;
+        }

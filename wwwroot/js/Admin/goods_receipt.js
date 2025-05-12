@@ -107,7 +107,7 @@ $('#btn_deleteModal').click(function () {
 });
 
 function GetAll() {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     let dataRequest = {
         Request: $('#request').val(),
         PageNumber: parseInt(pageNumber),
@@ -152,7 +152,7 @@ function GetAll() {
     });
 }
 function GetDetails(id, event) {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     var htmlDetails = `<tr class="goodsReceipt-details" id="goodsReceipt_details_${id}" style="border-left: 2px solid red; border-right: 2px solid red; border-bottom: 2px solid red;">
                         <td colspan="8" class="p-1">
                             <div class="card-body p-0">
@@ -374,12 +374,12 @@ function Validate() {
 }
 function CreateOrUpdate() {
     if (Validate()) {
-        ShowSpinnerClient();
+        //ShowSpinnerClient();
         let arrDetails = [];
         $(".goodsReceipt_details_item").each(function (index, el) {
             let materialID = parseInt($(el).find(".material-Id").val());
             let price = $(el).find(".material-price").val()
-            if (!price || isNaN(price)) return;
+            //if (!price || isNaN(price)) return;
 
             price = parseInt(price.replaceAll(",", ""));
             let quantity = parseInt($(el).find(".material-total").val());

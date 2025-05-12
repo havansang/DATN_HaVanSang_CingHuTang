@@ -89,7 +89,7 @@ $('#btn_deleteModal').click(function () {
     DeleteById(productTypeId);
 });
 function GetAll() {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     let _url = "/Admin/Product/GetAllProductType?";
     var request = $('#request').val();
     var groupId = $('#groupId option:selected').val();
@@ -167,7 +167,7 @@ function CreateOrUpdate() {
         GroupTypeId: parseInt($("#formGroupType").val()),
         Description: $("#formNote").val(),
     };
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     let _url = "/Admin/Product/CreateProductType";
     $.ajax({
         type: 'POST',
@@ -191,7 +191,7 @@ function CreateOrUpdate() {
 }
 function DeleteById(id) {
     if (confirm("Bạn có chắc chắn muốn thực hiện thao tác này?") == true) {
-        ShowSpinnerClient();
+        //ShowSpinnerClient();
         let _url = "/Admin/Product/DeleteProductType";
         $.ajax({
             type: 'GET',

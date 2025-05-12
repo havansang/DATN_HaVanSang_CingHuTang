@@ -54,7 +54,7 @@ $('#btn_search').click(function () {
     GetAll();
 })
 function GetAll() {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     let _url = "/Shop/GetALlProduct?";
     var request = $('#request').val();
     var groupId = $('#groupId option:selected').val();
@@ -112,7 +112,7 @@ function GetAll() {
 
         }
     });
-    HideSpinnerClient();
+    //HideSpinnerClient();
 }
 function GetAllProductType() {
     $.ajax({

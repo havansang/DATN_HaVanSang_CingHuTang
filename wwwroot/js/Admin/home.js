@@ -34,7 +34,7 @@
     }, 75000);
 
 
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
 
 })
 

@@ -1,4 +1,6 @@
+using CingHuTang.Models;
 using CingHuTang.Services.Vnpay;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +18,6 @@ builder.Services.AddControllersWithViews();
 //Conect Vnpay API
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

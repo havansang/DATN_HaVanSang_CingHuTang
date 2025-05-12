@@ -4,7 +4,7 @@ $(document).ready(function (e) {
 });
 
 function GetAll() {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     var request = $('#request').val() ?? "";
     var dateStart = $('#date_start').val();
     var dateEnd = $('#date_end').val();

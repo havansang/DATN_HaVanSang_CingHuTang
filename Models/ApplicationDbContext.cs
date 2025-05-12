@@ -55,6 +55,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<ProductType> ProductTypes { get; set; }
 
+    public virtual DbSet<Review> Reviews { get; set; }
+
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     public virtual DbSet<Topping> Toppings { get; set; }
@@ -338,6 +340,17 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.TypeName).HasMaxLength(250);
             entity.Property(e => e.UpdatedBy).HasMaxLength(150);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Review>(entity =>
+        {
+            entity.ToTable("Review");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AccountId).HasColumnName("AccountID");
+            entity.Property(e => e.Comment).HasMaxLength(250);
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.ReviewDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Supplier>(entity =>

@@ -29,7 +29,7 @@ function UpdateLoadData() {
 
 
         if (isValid) {
-            ShowSpinnerClient();
+            //ShowSpinnerClient();
 
             let obj = {
                 Id: parseInt($("#Account_ID").val()),
@@ -123,7 +123,7 @@ function ChangePassword() {
 
 
     if (isValid) {
-        ShowSpinnerClient();
+        //ShowSpinnerClient();
 
         let obj = {
             AccountID: parseInt($("#Account_ID").val()),

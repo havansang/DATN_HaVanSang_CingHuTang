@@ -88,7 +88,7 @@ $('#btn_deleteModal').click(function () {
     DeleteById(accountId);
 });
 function GetAll() {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     let _url = "/Admin/Account/GetAll?";
     var request = $('#request').val();
     var groupId = $('#groupId option:selected').val();
@@ -213,7 +213,7 @@ function CreateOrUpdate() {
     }
 
 
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     var obj = {
         Id: accountId,
         FullName: $("#formName").val(),

@@ -8,7 +8,7 @@ function ShowSpinnerClient() {
     $("#model_spinner_layout_client").modal('show')
     setTimeout(() => {
         HideSpinnerClient();
-    }, 500);
+    }, 300);
 }
 
 function HideSpinnerClient() {

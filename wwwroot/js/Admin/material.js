@@ -95,7 +95,7 @@ $('#btn_deleteModal').click(function () {
 });
 
 function GetAll() {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
     let _url = "/Admin/Material/GetAll?";
     var request = $('#request').val();
     if (request.length > 0) {

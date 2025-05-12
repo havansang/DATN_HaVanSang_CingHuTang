@@ -2,7 +2,7 @@
     ViewData["Title"] = "Shop details";
     var accountId = ViewBag.Account.Id;
 }
-
+<span id="product-container" style="display:none">@ViewBag.ProductID</span>
 <section class="bg-light">
     <div class="container pb-5">
         <div class="row">
@@ -128,7 +128,78 @@
         </div>
     </div>
 </section>
+<!-- Section đánh giá sản phẩm ========================================================================== -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-4">Đánh giá sản phẩm</h4>
 
+                <!-- Form đánh giá -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Viết đánh giá của bạn</h5>
+                        <form id="review-form">
+                            <div class="mb-3">
+                                <div class="rating">
+                                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5"><i class="bi bi-star"></i></label>
+                                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4"><i class="bi bi-star"></i></label>
+                                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3"><i class="bi bi-star"></i></label>
+                                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2"><i class="bi bi-star"></i></label>
+                                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1"><i class="bi bi-star"></i></label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="review-content" rows="3" placeholder="Nhập đánh giá của bạn..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Gửi đánh giá</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danh sách đánh giá -->
+                <div id="reviews-list">
+                    <h5 class="mb-3">Đánh giá từ khách hàng</h5>
+
+                    <!-- Đánh giá mẫu (sau này sẽ được thay thế bằng dữ liệu từ database) -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="card-subtitle mb-2 text-muted">Nguyễn Văn A</h6>
+                                <div class="text-warning">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                            </div>
+                            <p class="card-text">Trà sữa rất ngon, hương vị thơm, sẽ ủng hộ dài dài.</p>
+                            <small class="text-muted">Đăng ngày 20/10/2023</small>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="card-subtitle mb-2 text-muted">Trần Thị B</h6>
+                                <div class="text-warning">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                </div>
+                            </div>
+                            <p class="card-text">Ngon nhưng hơi ngọt, lần sau sẽ giảm đường.</p>
+                            <small class="text-muted">Đăng ngày 15/10/2023</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Start Article -->
 <section class="py-5">
     <div class="container">
@@ -183,3 +254,4 @@
 background:#28a745; color:#fff; padding:10px 20px; border-radius:5px; z-index:9999;"></div>
 
 <script src="~/js/client/productDetails.js"></script>
+<link href="~/css/client/comment.css" rel="stylesheet" />

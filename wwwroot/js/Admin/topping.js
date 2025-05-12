@@ -89,7 +89,7 @@ $('#btn_deleteModal').click(function () {
     DeleteById(modelID);
 });
 function GetAll() {
-    ShowSpinnerClient();
+    //ShowSpinnerClient();
 
     let _url = "/Admin/Topping/GetAll?";
     var request = $('#request').val();

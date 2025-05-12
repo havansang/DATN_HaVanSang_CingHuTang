@@ -42,6 +42,7 @@ namespace CingHuTang.Controllers
         {
             Account acc = _accRepo.GetByID(HttpContext.Session.GetInt32("AccountId") ?? 0) ?? new Account();
             ViewBag.Account = acc;
+            ViewBag.ProductID=prId;
 
             ViewBag.Product = _prRepo.GetByID(prId);
 
