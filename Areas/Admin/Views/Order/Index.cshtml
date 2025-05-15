@@ -6,14 +6,23 @@
     <div class="card-body">
 
         <div class="row mt-2 pe-0 me-0">
-            <div class="col-12 mb-2 row pe-0 m-0">
-                <div class="pagetitle col-sm-8 col-12 m-0">
-                    <h1 class="fs-2">Đơn đặt hàng</h1>
+            <div class="col-12 mb-2 row pe-0 m-0 align-items-center">
+                <div class="pagetitle col-sm-8 col-12 d-flex align-items-center flex-wrap gap-2">
+                    <h1 class="fs-2 mb-0">Đơn đặt hàng</h1>
+                    <button class="btn btn-outline-primary btn-sm" onclick="filterOrders('all')">Tất cả</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="filterOrders('pending')">Chờ xác nhận</button>
+                    <button class="btn btn-outline-warning btn-sm" onclick="filterOrders('shipping')">Đang giao</button>
+                    <button class="btn btn-outline-success btn-sm" onclick="filterOrders('completed')">Hoàn thành</button>
+                    <button class="btn btn-outline-danger btn-sm" onclick="filterOrders('cancelled')">Đã hủy</button>
                 </div>
-                <div class="col-sm-4 col-12 d-flex justify-content-end pe-0">
-                    <button onclick="DowLoadExcel()" class="btn btn-sm btn-success mb-1" id="ExportExcel"><i class="bi bi-arrow-up-right-square"></i> Export</button>
+
+                <div class="col-sm-4 col-12 d-flex justify-content-end pe-0 mt-sm-0 mt-2">
+                    <button onclick="DowLoadExcel()" class="btn btn-sm btn-success" id="ExportExcel">
+                        <i class="bi bi-arrow-up-right-square"></i> Export
+                    </button>
                 </div>
             </div>
+
 
             <div class="col-12 mb-1 row pe-0 m-0">
                 <div class="col-md-2 col-12 p-1">

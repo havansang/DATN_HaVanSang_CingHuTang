@@ -22,6 +22,7 @@ namespace CingHuTang.Controllers
             {
                 double distance = await CalculateWalkingDistance(shopAddress, deliveryAddress, apiKey);
                 decimal fee = (decimal)(distance * 1500*0.001); // Giả sử 5.000đ/km
+                fee = Math.Ceiling(fee / 1000) * 1000;
                 return Json(new { distance, fee });
             }
             catch (Exception ex)

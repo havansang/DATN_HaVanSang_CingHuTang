@@ -71,6 +71,7 @@ $('#btn_search').click(function () {
 function GetAll() {
     var request = $('#request').val() ?? "";
     var status = $('#order_status option:selected').val();
+    //var status = -1;
     var dateStart = $('#date_start').val();
     var dateEnd =   $('#date_end').val();
     let obj = {
@@ -96,7 +97,77 @@ function GetAll() {
                                 <btn class="btn btn-sm btn-primary" title="Thành công" ${item.status >= 2 ? "hidden" : ""}  onclick="StatusApproved(${item.id}, 2, 'Hoàn thành đơn hàng')"><i class="bi bi-check-lg"></i></btn>
                             </td>
                             <td scope="col" class="text-center"> <a style="color: blue;  cursor: pointer;" onclick="GetDetails(${item.id}, event)" created-date="${moment(item.createDate).format('DD/MM/YYYY HH:mm:ss')}">${item.orderCode}</a></td>
-                            <td scope="col" class="text-end"> ${(item.totalMoney+25000).toLocaleString('en-US') } VNĐd</td>
+                            <td scope="col" class="text-end"> ${(item.totalMoney+25000).toLocaleString('en-US') } VNĐ</td>
+                            <td scope="col" class="text-center">${moment(item.createDate).format('DD/MM/YYYY HH:mm:ss')}</td>
+                            <td class="text-center" scope="col">${item.status === 0 ? "Chờ xác nhận" : (item.status === 1 ? "Đang giao" : (item.status === 2 ? "Hoàn thành" : "Đã hủy"))}</td>
+                            <td scope="col">${item.customerName ?? ""}</td>
+                            <td scope="col">${item.phoneNumber ?? ""}</td>
+                            <td scope="col">${item.address ?? ""}</td>
+                            <td scope="col">${item.paymentType ?? ""}</td>
+                        </tr>`;
+            })
+
+            let total = Math.ceil(data.totalCount.totalCount / 10);
+            totalPage = total > 0 ? total : 1;
+            $('#tbody').html(html);
+            $('#page_details').text(`Trang ${pageNumber} / ${totalPage}`);
+            $('#pageNumber').val(pageNumber);
+            Pagination();
+        },
+
+        error: function (err) {
+            MessageError(err.responseText);
+        }
+    });
+}
+
+function filterOrders(status) {
+    const statusMap = {
+        all: -1,
+        pending: 0,
+        shipping: 1,
+        completed: 2,
+        cancelled: 3
+    };
+
+    let sta = statusMap[status] ?? -1;
+
+    // Đồng bộ giá trị với dropdown
+    const dropdown = document.getElementById("order_status");
+    if (dropdown) {
+        dropdown.value = sta.toString(); // set giá trị tương ứng
+        // Nếu dùng Select2, gọi trigger để cập nhật giao diện
+        $(dropdown).trigger('change');
+    }
+
+    var request = $('#request').val() ?? "";
+    var status = sta;
+    var dateStart = $('#date_start').val();
+    var dateEnd = $('#date_end').val();
+    let obj = {
+        request,
+        pageNumber,
+        status,
+        dateStart,
+        dateEnd
+    };
+    $.ajax({
+        url: "/Admin/Order/GetAll",
+        data: JSON.stringify(obj),
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+            var html = '';
+            $.each(data.data, function (index, item) {
+                html += `<tr class="align-middle">
+                            <td scope="col" class="align-center text-center" style="white-space: nowrap">
+                                <btn class="btn btn-sm btn-danger" title="Hủy đơn hàng" ${item.status >= 2 ? "hidden" : ""} onclick="CancelOrder(${item.id})"><i class="bi bi-x-circle-fill"></i></btn>
+                                <btn class="btn btn-sm btn-success" title="Giao hàng" ${item.status >= 1 ? "hidden" : ""} onclick="StatusApproved(${item.id}, 1, 'Giao đơn hàng')"><i class="bi bi-truck"></i></btn>
+                                <btn class="btn btn-sm btn-primary" title="Thành công" ${item.status >= 2 ? "hidden" : ""}  onclick="StatusApproved(${item.id}, 2, 'Hoàn thành đơn hàng')"><i class="bi bi-check-lg"></i></btn>
+                            </td>
+                            <td scope="col" class="text-center"> <a style="color: blue;  cursor: pointer;" onclick="GetDetails(${item.id}, event)" created-date="${moment(item.createDate).format('DD/MM/YYYY HH:mm:ss')}">${item.orderCode}</a></td>
+                            <td scope="col" class="text-end"> ${(item.totalMoney + 25000).toLocaleString('en-US')} VNĐ</td>
                             <td scope="col" class="text-center">${moment(item.createDate).format('DD/MM/YYYY HH:mm:ss')}</td>
                             <td class="text-center" scope="col">${item.status === 0 ? "Chờ xác nhận" : (item.status === 1 ? "Đang giao" : (item.status === 2 ? "Hoàn thành" : "Đã hủy"))}</td>
                             <td scope="col">${item.customerName ?? ""}</td>
